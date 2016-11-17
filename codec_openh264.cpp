@@ -38,7 +38,7 @@
  *****************************************************************************/
 
 #ifndef __MINGW32__
-#   include "vlc_fixups.h"
+//#include "vlc_fixups.h"
 #endif
 #include "vlc_common.h"
 #include "vlc_plugin.h"
@@ -158,7 +158,7 @@ static int OpenDecoder( vlc_object_t *p_this )
     p_sys->i_size = 0;
 
     p_sys->sDecParam->sVideoProperty.size = sizeof (p_sys->sDecParam->sVideoProperty);
-    p_sys->sDecParam->eOutputColorFormat = videoFormatI420;
+    // p_sys->sDecParam->eOutputColorFormat = videoFormatI420;
     p_sys->sDecParam->uiTargetDqLayer = (uint8_t) - 1;
     p_sys->sDecParam->eEcActiveIdc = ERROR_CON_SLICE_COPY;
     p_sys->sDecParam->sVideoProperty.eVideoBsType = VIDEO_BITSTREAM_DEFAULT;
@@ -230,9 +230,11 @@ static picture_t *DecodeBlock( decoder_t *p_dec, block_t **pp_block )
     if( !pp_block || !*pp_block ) return NULL;
     p_block = *pp_block;
 
+    /* Indio
     int32_t iBufPos = 0;
     int32_t iSliceIndex = 0;
     int32_t iSliceSize = 0;
+    */
 
     uint8_t* pData[3] = {NULL};
 
@@ -488,7 +490,7 @@ static int OpenEncoder( vlc_object_t *p_this )
     p_sys->sSvcParam->sSpatialLayers[0].fFrameRate         = 25;
     p_sys->sSvcParam->sSpatialLayers[0].iSpatialBitrate    = 2500000;
     p_sys->sSvcParam->sSpatialLayers[0].iMaxSpatialBitrate    = UNSPECIFIED_BIT_RATE;
-    p_sys->sSvcParam->sSpatialLayers[0].sSliceCfg.uiSliceMode = SM_SINGLE_SLICE;
+    p_sys->sSvcParam->sSpatialLayers[0].sSliceArgument.uiSliceMode = SM_SINGLE_SLICE;
 
     if (cmResultSuccess != p_sys->pSVCEncoder->InitializeExt(p_sys->sSvcParam)) { // SVC encoder initialization
         printf ("SVC encoder Initialize failed\n");
