@@ -28,11 +28,11 @@ macx-clang: {
     QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
 
     # pre target change nate to lib
-    #    changename.target = changename_target
-    #    changename.commands += $$quote(cp $$_PRO_FILE_PWD_/../openh264/libopenh264.1.dylib $${DESTDIR}$$escape_expand(\n\t))
-    #    changename.commands += $$quote(install_name_tool -id @executable_path/../Frameworks/libopenh264.1.dylib $${DESTDIR}/libopenh264.1.dylib$$escape_expand(\n\t))
-    #    QMAKE_EXTRA_TARGETS += changename
-    #    PRE_TARGETDEPS += changename_target
+#    changename.target = changename_target
+#    changename.commands += $$quote(cp $$_PRO_FILE_PWD_/../openh264/libopenh264.1.dylib $${DESTDIR}$$escape_expand(\n\t))
+#    changename.commands += $$quote(install_name_tool -id @executable_path/../Frameworks/libopenh264.1.dylib $${DESTDIR}/libopenh264.1.dylib$$escape_expand(\n\t))
+#    QMAKE_EXTRA_TARGETS += changename
+#    PRE_TARGETDEPS += changename_target
 
     QMAKE_LFLAGS += -rpath @executable_path/../Frameworks
     LIBS += -L$$_PRO_FILE_PWD_/../vlc-qt/build/src/lib/VLCQtCore.framework/Versions/Current/lib -lvlc -lvlccore
