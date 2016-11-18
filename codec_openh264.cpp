@@ -38,7 +38,7 @@
  *****************************************************************************/
 
 #ifndef __MINGW32__
-//#include "vlc_fixups.h"
+/* #   include "vlc_fixups.h" INDIO */
 #endif
 #include "vlc_common.h"
 #include "vlc_plugin.h"
@@ -67,20 +67,20 @@ static block_t *Encode( encoder_t *p_enc, picture_t *p_pict );
  * Module descriptor
  *****************************************************************************/
 vlc_module_begin ()
-    set_category( CAT_INPUT )
-    set_subcategory( SUBCAT_INPUT_VCODEC )
-    set_shortname( "OpenH264 codec" )
+set_category( CAT_INPUT )
+set_subcategory( SUBCAT_INPUT_VCODEC )
+set_shortname( "OpenH264 codec" )
 
-    set_description( N_("OpenH264 encoder") )
-    set_capability( "encoder", 0 )
-    set_callbacks( OpenEncoder, CloseEncoder )
-    add_shortcut( "OpenH264" )
+set_description( N_("OpenH264 encoder") )
+set_capability( "encoder", 0 )
+set_callbacks( OpenEncoder, CloseEncoder )
+add_shortcut( "OpenH264" )
 
-    add_submodule ()
-    set_description( N_("OpenH264 decoder") )
-    set_capability( "decoder", 0 )
-    set_callbacks( OpenDecoder, CloseDecoder )
-    add_shortcut( "OpenH264" )
+add_submodule ()
+set_description( N_("OpenH264 decoder") )
+set_capability( "decoder", 0 )
+set_callbacks( OpenDecoder, CloseDecoder )
+add_shortcut( "OpenH264" )
 vlc_module_end ()
 
 /*****************************************************************************
@@ -130,12 +130,12 @@ static int OpenDecoder( vlc_object_t *p_this )
     p_dec->fmt_out.video.i_sar_den = 1;
 
     if( p_dec->fmt_in.video.i_frame_rate > 0 &&
-        p_dec->fmt_in.video.i_frame_rate_base > 0 )
+            p_dec->fmt_in.video.i_frame_rate_base > 0 )
     {
         p_dec->fmt_out.video.i_frame_rate =
-            p_dec->fmt_in.video.i_frame_rate;
+                p_dec->fmt_in.video.i_frame_rate;
         p_dec->fmt_out.video.i_frame_rate_base =
-            p_dec->fmt_in.video.i_frame_rate_base;
+                p_dec->fmt_in.video.i_frame_rate_base;
     }
 
     p_sys->pDecoder = NULL;
@@ -158,7 +158,7 @@ static int OpenDecoder( vlc_object_t *p_this )
     p_sys->i_size = 0;
 
     p_sys->sDecParam->sVideoProperty.size = sizeof (p_sys->sDecParam->sVideoProperty);
-    // p_sys->sDecParam->eOutputColorFormat = videoFormatI420;
+    p_sys->sDecParam->eOutputColorFormat = videoFormatI420;
     p_sys->sDecParam->uiTargetDqLayer = (uint8_t) - 1;
     p_sys->sDecParam->eEcActiveIdc = ERROR_CON_SLICE_COPY;
     p_sys->sDecParam->sVideoProperty.eVideoBsType = VIDEO_BITSTREAM_DEFAULT;
@@ -230,11 +230,9 @@ static picture_t *DecodeBlock( decoder_t *p_dec, block_t **pp_block )
     if( !pp_block || !*pp_block ) return NULL;
     p_block = *pp_block;
 
-    /* Indio
     int32_t iBufPos = 0;
     int32_t iSliceIndex = 0;
     int32_t iSliceSize = 0;
-    */
 
     uint8_t* pData[3] = {NULL};
 
@@ -411,7 +409,7 @@ static void CloseDecoder( vlc_object_t *p_this )
     decoder_sys_t *p_sys = p_enc->p_sys;
 
     if (p_sys->pDecoder) {
-      WelsDestroyDecoder (p_sys->pDecoder);
+        WelsDestroyDecoder (p_sys->pDecoder);
     }
 }
 
@@ -490,7 +488,7 @@ static int OpenEncoder( vlc_object_t *p_this )
     p_sys->sSvcParam->sSpatialLayers[0].fFrameRate         = 25;
     p_sys->sSvcParam->sSpatialLayers[0].iSpatialBitrate    = 2500000;
     p_sys->sSvcParam->sSpatialLayers[0].iMaxSpatialBitrate    = UNSPECIFIED_BIT_RATE;
-    p_sys->sSvcParam->sSpatialLayers[0].sSliceArgument.uiSliceMode = SM_SINGLE_SLICE;
+    p_sys->sSvcParam->sSpatialLayers[0].sSliceCfg.uiSliceMode = SM_SINGLE_SLICE;
 
     if (cmResultSuccess != p_sys->pSVCEncoder->InitializeExt(p_sys->sSvcParam)) { // SVC encoder initialization
         printf ("SVC encoder Initialize failed\n");
@@ -605,7 +603,7 @@ static block_t *Encode( encoder_t *p_enc, picture_t *p_pict )
 
     /* This isn't really valid for streams with B-frames */
     p_block->i_length = INT64_C(1000000) *
-        p_enc->fmt_in.video.i_frame_rate_base /
+            p_enc->fmt_in.video.i_frame_rate_base /
             p_enc->fmt_in.video.i_frame_rate;
 
     p_block->i_pts = p_pict->date;
@@ -623,6 +621,6 @@ static void CloseEncoder( vlc_object_t *p_this )
     encoder_sys_t *p_sys = p_enc->p_sys;
 
     if (p_sys->pSVCEncoder) {
-      WelsDestroySVCEncoder (p_sys->pSVCEncoder);
+        WelsDestroySVCEncoder (p_sys->pSVCEncoder);
     }
 }
