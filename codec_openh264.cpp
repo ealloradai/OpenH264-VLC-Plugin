@@ -271,7 +271,11 @@ static picture_t *DecodeBlock( decoder_t *p_dec, block_t **pp_block )
                     ret = p_sys->pDecoder->DecodeFrameNoDelay (nalStart, nalLength, pData, p_sys->sDstBufInfo);
                     if (dsErrorFree != ret)
                     {
-                        printf("some error in decoding :( %d\n", ret);
+                        printf("some error in decoding :( %d - supposed NAL type %d\n", ret, nalType);
+                    }
+                    else
+                    {
+                        printf("decoding ok %d !\n", nalType);
                     }
                     break;
                 default:
